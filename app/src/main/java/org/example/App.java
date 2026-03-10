@@ -2,17 +2,20 @@ package org.example;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.nio.ByteBuffer;
 
 public class App {
-    HashMap<String, byte[]> data = new HashMap<>();
-    private byte[] p10Key1 = new byte[8];
-    private byte[] p10Key2 = new byte[8];
+    public HashMap<String, byte[]> data = new HashMap<>();
+    public byte[] k1 = new byte[8];
+    public byte[] k2 = new byte[8];
 
     App() {
         RAWDATA();
     }
 
     public static void main(String[] args) {
+        App app = new App();
+        app.KeyGeneration(app.data.get("rawKey2"));
     }
 
     public static byte[] Encrypt(byte[] rawkey, byte[] plaintext) {
@@ -23,37 +26,50 @@ public class App {
         return new byte[0];
     }
 
-    // P10(k1, k2, k3, k4, k5, k6, k7, k8, k9, k10) = (k3, k5, k2, k7, k4, k10, k1,
-    // k9, k8, k6
-    private void KeyGeneration(byte[] rawkey) {
+    public void KeyGeneration(byte[] rawkey) {
         byte[] p10 = data.get("P10").clone();
         byte[] rawkeyClone = rawkey.clone();
-        for (int i = 0; i < p10.length; i++) {
-            rawkeyClone[i] = rawkey[p10[i] - 1]; // permutation
+        byte[] k1 = permuteArray(rawkeyClone, p10);
+        leftShiftBothHalves(k1, 1);
+        byte[] ls1 = k1.clone();
+        byte[] p8 = data.get("P8").clone();
+        k1 = permuteArray(k1, p8);
+        leftShiftBothHalves(ls1, 2);
+        byte[] k2 = permuteArray(ls1, p8);
+        this.k1 = k1;
+        this.k2 = k2;
+    }
+
+    // P10(k1,k2,k3,k4,k5,k6,k7,k8,k9,k10) = (k3,k5,k2,k7,k4,k10,k1,k9,k8,k6)
+    static byte[] permuteArray(byte[] src, byte[] by) {
+        byte[] dst = new byte[by.length];
+        for (int i = 0; i < by.length; i++) {
+            dst[i] = src[by[i] - 1];
         }
-        byte[] ls1 = new byte[5];
-        byte[] ls2 = new byte[5];
-        // ls-1
-        for (int i = 0; i < 5; i++) {
-            if (i - 1 < 0) {
-                ls1[i] = rawkeyClone[i + 5];
-            } else {
-                ls1[i] = rawkeyClone[i - 1];
-            }
+        return dst;
+    }
+
+    static byte[] leftShift(byte[] input, int shift) {
+        byte[] output = new byte[input.length];
+        for (int i = 0; i < input.length; i++) {
+            int shiftIndex = Math.floorMod((i - shift), input.length);
+            output[shiftIndex] = input[i];
         }
-        // ls-1
-        for (int i = 5; i < 10; i++) {
-            if (i - 1 < 5) {
-                ls2[i] = rawkeyClone[i + 5];
-            } else {
-                ls2[i] = rawkeyClone[i - 1];
-            }
+        return output;
+    }
+
+    static void leftShiftBothHalves(byte[] arr, int shift) {
+        byte[] leftHalf = new byte[arr.length / 2];
+        byte[] rightHalf = new byte[arr.length / 2];
+        for (int i = 0; i < arr.length / 2; i++) {
+            leftHalf[i] = arr[i];
+            rightHalf[i] = arr[i + arr.length / 2];
         }
-        for (int i = 0; i < 5; i++) {
-            p10Key1[i] = ls1[i];
-        }
-        for (int i = 0; i < 5; i++) {
-            p10Key1[i + 5] = ls2[i + 5];
+        byte[] l = leftShift(leftHalf, shift);
+        byte[] r = leftShift(rightHalf, shift);
+        for (int i = 0; i < arr.length / 2; i++) {
+            arr[i] = l[i];
+            arr[i + arr.length / 2] = r[i];
         }
     }
 
@@ -72,6 +88,8 @@ public class App {
         byte[] cipherText3 = { 0, 0, 0, 0, 0, 1, 0, 0 };
         byte[] P10 = { 3, 5, 2, 7, 4, 10, 1, 9, 8, 6 };
         byte[] P8 = { 6, 3, 7, 4, 8, 5, 10, 9 };
+        byte[] IP = { 2, 6, 3, 1, 4, 8, 5, 7 };
+        byte[] IPinverse = { 4, 1, 3, 5, 7, 2, 8, 6 };
         data.put("rawKey0", rawKey0);
         data.put("rawKey1", rawKey1);
         data.put("rawKey2", rawKey2);
@@ -86,5 +104,7 @@ public class App {
         data.put("cipherText3", cipherText3);
         data.put("P10", P10);
         data.put("P8", P8);
+        data.put("IP", IP);
+        data.put("IPinverse", IPinverse);
     }
 }
