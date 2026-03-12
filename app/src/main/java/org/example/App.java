@@ -1,8 +1,10 @@
 package org.example;
 
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.nio.ByteBuffer;
+import java.security.InvalidKeyException;
 
 public class App {
     public HashMap<String, byte[]> data = new HashMap<>();
@@ -73,6 +75,70 @@ public class App {
         }
     }
 
+    static byte[] expansionPermutation(byte[] input, byte[] ep) {
+        byte[] exp = new byte[ep.length];
+        for (int i = 0; i < ep.length; i++) {
+            exp[i] = input[ep[i] - 1];
+        }
+        return exp;
+    }
+
+    static byte[] xor(byte[] a, byte[] b) {
+        byte[] exclusiveOr = new byte[a.length];
+        for (int i = 0; i < a.length; i++) {
+            exclusiveOr[i] = (byte) (a[i] ^ b[i]);
+        }
+        return exclusiveOr;
+    }
+
+    static byte[] s0(byte[] l) {
+        byte[][] sBox0 = { { 1, 0, 3, 2 }, { 3, 2, 1, 0, }, { 0, 2, 1, 3 }, { 3, 1, 3, 2 } };
+        int row = (l[0] << 1) | l[3];
+        int col = (l[1] << 1) | l[2];
+        byte twoBitNum = sBox0[row][col];
+        byte[] output = new byte[2];
+        output[0] = (byte) ((twoBitNum >> 1) & 1);
+        output[1] = (byte) (twoBitNum & 1);
+
+        return output;
+    }
+
+    static byte[] s1(byte[] r) {
+        byte[][] sBox1 = { { 0, 1, 2, 3 }, { 2, 0, 1, 3 }, { 3, 0, 1, 0 }, { 2, 1, 0, 3 } };
+        int row = (r[0] << 1) | r[3];
+        int col = (r[1] << 1) | r[2];
+
+        byte twoBitNum = sBox1[row][col];
+        byte[] output = new byte[2];
+        output[0] = (byte) ((twoBitNum >> 1) & 1);
+        output[1] = (byte) (twoBitNum & 1);
+
+        return output;
+    }
+
+    byte[] fk(byte[] ip) {
+        byte[] r = new byte[4];
+        for (int i = 4; i < 8; i++) {
+            r[i - 4] = ip[i];
+        }
+        byte[] ep = { 4, 1, 2, 3, 2, 3, 4, 1 };
+        byte[] exp = expansionPermutation(r, ep);
+        byte[] xord = xor(exp, k1);
+        byte[] leftHalf = new byte[4];
+        byte[] rightHalf = new byte[4];
+        System.arraycopy(xord, 0, leftHalf, 0, 4);
+        System.arraycopy(xord, 4, rightHalf, 0, 4);
+        byte[] es0 = s0(leftHalf);
+        byte[] es1 = s1(rightHalf);
+        byte[] p4 = new byte[4];
+        p4[0] = es0[0];
+        p4[1] = es0[1];
+        p4[2] = es1[0];
+        p4[3] = es1[1];
+        byte[] P4 = { 2, 4, 3, 1 };
+        return permuteArray(p4, P4);
+    }
+
     void RAWDATA() {
         byte[] rawKey0 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         byte[] rawKey1 = { 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 };
@@ -88,8 +154,10 @@ public class App {
         byte[] cipherText3 = { 0, 0, 0, 0, 0, 1, 0, 0 };
         byte[] P10 = { 3, 5, 2, 7, 4, 10, 1, 9, 8, 6 };
         byte[] P8 = { 6, 3, 7, 4, 8, 5, 10, 9 };
+        byte[] P4 = { 2, 4, 3, 1 };
         byte[] IP = { 2, 6, 3, 1, 4, 8, 5, 7 };
         byte[] IPinverse = { 4, 1, 3, 5, 7, 2, 8, 6 };
+        byte[] EP = { 4, 1, 2, 3, 2, 3, 4, 1 };
         data.put("rawKey0", rawKey0);
         data.put("rawKey1", rawKey1);
         data.put("rawKey2", rawKey2);
@@ -104,7 +172,9 @@ public class App {
         data.put("cipherText3", cipherText3);
         data.put("P10", P10);
         data.put("P8", P8);
+        data.put("P4", P4);
         data.put("IP", IP);
         data.put("IPinverse", IPinverse);
+        data.put("EP", EP);
     }
 }
