@@ -14,6 +14,7 @@ import static org.example.App.expansionPermutation;
 import static org.example.App.xor;
 import static org.example.App.s0;
 import static org.example.App.s1;
+import static org.example.App.sw;
 
 class AppTest {
     static HashMap<String, byte[]> data = new HashMap<>();
@@ -190,16 +191,49 @@ class AppTest {
         byte[] ip = app.data.get("IP").clone();
         byte[] plainText0 = { 0, 1, 1, 1, 0, 0, 1, 0 };
         byte[] intialPermutation = permuteArray(plainText0, ip);
-        byte[] actualP4 = app.fk(intialPermutation);
+        byte[] actualP4 = app.fk(intialPermutation, app.k1);
         byte[] expectedP4 = { 0, 1, 1, 1 };
         assertEquals(Arrays.toString(expectedP4), Arrays.toString(actualP4));
     }
 
     @Test
-    void encryptTest() {
+    void swTest() {
+        byte[] eightBits = { 1, 0, 1, 0, 0, 0, 0, 0 };
+        byte[] fourBits = { 1, 1, 1, 0 };
+        byte[] actual = sw(fourBits, eightBits);
+        byte[] expected = { 0, 0, 0, 0, 1, 1, 1, 0 };
+        assertEquals(Arrays.toString(expected), Arrays.toString(actual));
+    }
+
+    @Test
+    void encryptTest0() {
         byte[] rawKey0 = data.get("rawKey0");
         byte[] plainText0 = data.get("plainText0");
         byte[] cipherText0 = data.get("cipherText0");
-        assertEquals(Encrypt(rawKey0, plainText0), cipherText0);
+        assertEquals(Arrays.toString(Encrypt(rawKey0, plainText0)), Arrays.toString(cipherText0));
+    }
+
+    @Test
+    void encryptTest1() {
+        byte[] rawKey1 = data.get("rawKey1");
+        byte[] plainText1 = data.get("plainText1");
+        byte[] cipherText1 = data.get("cipherText1");
+        assertEquals(Arrays.toString(Encrypt(rawKey1, plainText1)), Arrays.toString(cipherText1));
+    }
+
+    @Test
+    void encryptTest2() {
+        byte[] rawKey2 = data.get("rawKey2");
+        byte[] plainText2 = data.get("plainText2");
+        byte[] cipherText2 = data.get("cipherText2");
+        assertEquals(Arrays.toString(Encrypt(rawKey2, plainText2)), Arrays.toString(cipherText2));
+    }
+
+    @Test
+    void encryptTest3() {
+        byte[] rawKey3 = data.get("rawKey3");
+        byte[] plainText3 = data.get("plainText3");
+        byte[] cipherText3 = data.get("cipherText3");
+        assertEquals(Arrays.toString(Encrypt(rawKey3, plainText3)), Arrays.toString(cipherText3));
     }
 }

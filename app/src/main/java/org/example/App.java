@@ -21,7 +21,27 @@ public class App {
     }
 
     public static byte[] Encrypt(byte[] rawkey, byte[] plaintext) {
-        return new byte[0];
+        App app = new App();
+        app.KeyGeneration(rawkey);
+
+        byte[] ip = initialPermutation(plaintext);
+
+        byte[] p4_1 = app.fk(ip, app.k1);
+        byte[] l4ip_1 = new byte[ip.length / 2];
+        System.arraycopy(ip, 0, l4ip_1, 0, ip.length / 2);
+        byte[] p4_1_xor = xor(p4_1, l4ip_1);
+        byte[] resultOfSwitch = sw(p4_1_xor, ip);
+
+        byte[] p4_2 = app.fk(resultOfSwitch, app.k2);
+        byte[] leftFourBitsOfSwitch = new byte[ip.length / 2];
+        System.arraycopy(resultOfSwitch, 0, leftFourBitsOfSwitch, 0, ip.length / 2);
+        byte[] p4_2_xor = xor(p4_2, leftFourBitsOfSwitch);
+
+        byte[] p4_2_xor_rightFourBitsSwitch = new byte[8];
+        System.arraycopy(p4_2_xor, 0, p4_2_xor_rightFourBitsSwitch, 0, ip.length / 2);
+        System.arraycopy(resultOfSwitch, 4, p4_2_xor_rightFourBitsSwitch, 4, ip.length / 2);
+
+        return inverseInitialPermutation(p4_2_xor_rightFourBitsSwitch);
     }
 
     public static byte[] Decrypt(byte[] rawkey, byte[] ciphertext) {
@@ -116,14 +136,24 @@ public class App {
         return output;
     }
 
-    byte[] fk(byte[] ip) {
+    static byte[] initialPermutation(byte[] plaintext) {
+        byte[] IP = { 2, 6, 3, 1, 4, 8, 5, 7 };
+        return permuteArray(plaintext, IP);
+    }
+
+    static byte[] inverseInitialPermutation(byte[] a) {
+        byte[] IPinverse = { 4, 1, 3, 5, 7, 2, 8, 6 };
+        return permuteArray(a, IPinverse);
+    }
+
+    byte[] fk(byte[] ip, byte[] key) {
         byte[] r = new byte[4];
         for (int i = 4; i < 8; i++) {
             r[i - 4] = ip[i];
         }
         byte[] ep = { 4, 1, 2, 3, 2, 3, 4, 1 };
         byte[] exp = expansionPermutation(r, ep);
-        byte[] xord = xor(exp, k1);
+        byte[] xord = xor(exp, key);
         byte[] leftHalf = new byte[4];
         byte[] rightHalf = new byte[4];
         System.arraycopy(xord, 0, leftHalf, 0, 4);
@@ -137,6 +167,14 @@ public class App {
         p4[3] = es1[1];
         byte[] P4 = { 2, 4, 3, 1 };
         return permuteArray(p4, P4);
+    }
+
+    // swap a with right 4 of b
+    static byte[] sw(byte[] l, byte[] r) {
+        byte[] output = new byte[8];
+        System.arraycopy(r, 4, output, 0, 4);
+        System.arraycopy(l, 0, output, 4, 4);
+        return output;
     }
 
     void RAWDATA() {
