@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import static org.example.App.Encrypt;
+import static org.example.App.Decrypt;
 import static org.example.App.leftShift;
 import static org.example.App.permuteArray;
 import static org.example.App.expansionPermutation;
@@ -234,6 +235,38 @@ class AppTest {
         byte[] rawKey3 = data.get("rawKey3");
         byte[] plainText3 = data.get("plainText3");
         byte[] cipherText3 = data.get("cipherText3");
-        assertEquals(Arrays.toString(Encrypt(rawKey3, plainText3)), Arrays.toString(cipherText3));
+        assertEquals(Arrays.toString(Decrypt(rawKey3, plainText3)), Arrays.toString(cipherText3));
+    }
+
+    @Test
+    void decryptTest0() {
+        byte[] rawKey0 = data.get("rawKey0");
+        byte[] plainText0 = data.get("plainText0");
+        byte[] cipherText0 = data.get("cipherText0");
+        assertEquals(Arrays.toString(Decrypt(rawKey0, cipherText0)), Arrays.toString(plainText0));
+    }
+
+    @Test
+    void decryptTest1() {
+        byte[] rawKey1 = data.get("rawKey1");
+        byte[] plainText1 = data.get("plainText1");
+        byte[] cipherText1 = data.get("cipherText1");
+        assertEquals(Arrays.toString(Decrypt(rawKey1, cipherText1)), Arrays.toString(plainText1));
+    }
+
+    @Test
+    void decryptTest2() {
+        byte[] rawKey2 = data.get("rawKey2");
+        byte[] plainText2 = data.get("plainText2");
+        byte[] cipherText2 = data.get("cipherText2");
+        assertEquals(Arrays.toString(Decrypt(rawKey2, cipherText2)), Arrays.toString(plainText2));
+    }
+
+    @Test
+    void decryptTest3() {
+        byte[] rawKey3 = data.get("rawKey3");
+        byte[] plainText3 = data.get("plainText3");
+        byte[] cipherText3 = data.get("cipherText3");
+        assertEquals(Arrays.toString(Decrypt(rawKey3, cipherText3)), Arrays.toString(plainText3));
     }
 }

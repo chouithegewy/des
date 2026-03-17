@@ -45,7 +45,26 @@ public class App {
     }
 
     public static byte[] Decrypt(byte[] rawkey, byte[] ciphertext) {
-        return new byte[0];
+        App app = new App();
+        app.KeyGeneration(rawkey);
+
+        byte[] ip = initialPermutation(ciphertext);
+        byte[] p4_2 = app.fk(ip, app.k2);
+        byte[] l4ip_2 = new byte[ip.length / 2];
+        System.arraycopy(ip, 0, l4ip_2, 0, ip.length / 2);
+        byte[] p4_2_xor = xor(p4_2, l4ip_2);
+        byte[] resultOfSwitch = sw(p4_2_xor, ip);
+
+        byte[] p4_1 = app.fk(resultOfSwitch, app.k1);
+        byte[] leftFourBitsOfSwitch = new byte[ip.length / 2];
+        System.arraycopy(resultOfSwitch, 0, leftFourBitsOfSwitch, 0, ip.length / 2);
+        byte[] p4_1_xor = xor(p4_1, leftFourBitsOfSwitch);
+
+        byte[] p4_1_xor_rightFourBitsSwitch = new byte[8];
+        System.arraycopy(p4_1_xor, 0, p4_1_xor_rightFourBitsSwitch, 0, ip.length / 2);
+        System.arraycopy(resultOfSwitch, 4, p4_1_xor_rightFourBitsSwitch, 4, ip.length / 2);
+
+        return inverseInitialPermutation(p4_1_xor_rightFourBitsSwitch);
     }
 
     public void KeyGeneration(byte[] rawkey) {
