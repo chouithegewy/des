@@ -17,7 +17,36 @@ public class App {
 
     public static void main(String[] args) {
         App app = new App();
-        app.KeyGeneration(app.data.get("rawKey2"));
+        // System.out.println("Some test cases...");
+        // app.encryptTest(0);
+        // app.encryptTest(1);
+        // app.encryptTest(2);
+        // app.encryptTest(3);
+        app.printTable();
+    }
+
+    void printTable() {
+        String format = "%-31s %-25s %25s%n";
+        System.out.printf(format, "rawkey", "plaintext", "ciphertext");
+        for (int i = 0; i < 4; ++i) {
+            byte[] rawkey = data.get("rawKeyTable" + i);
+            byte[] plaintext = data.get("plaintextTable" + i);
+            byte[] ciphertext = Encrypt(rawkey, plaintext);
+            System.out.printf(format, Arrays.toString(rawkey), Arrays.toString(plaintext), Arrays.toString(ciphertext));
+        }
+        for (int i = 4; i < 8; ++i) {
+            byte[] rawkey = data.get("rawKeyTable" + i);
+            byte[] ciphertext = data.get("ciphertextTable" + i);
+            byte[] plaintext = Decrypt(rawkey, ciphertext);
+            System.out.printf(format, Arrays.toString(rawkey), Arrays.toString(plaintext), Arrays.toString(ciphertext));
+        }
+    }
+
+    void encryptTest(int num) {
+        byte[] rawKey = data.get("rawKey" + num);
+        byte[] plaintext = data.get("plaintext" + num);
+        String ciphertext = Arrays.toString(Encrypt(rawKey, plaintext));
+        System.out.printf("Encrypt(%s, %s) == %s\n", Arrays.toString(rawKey), Arrays.toString(plaintext), ciphertext);
     }
 
     public static byte[] Encrypt(byte[] rawkey, byte[] plaintext) {
@@ -197,18 +226,34 @@ public class App {
     }
 
     void RAWDATA() {
+        byte[] rawKeyTable0 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        byte[] rawKeyTable1 = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        byte[] rawKeyTable2 = { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1 };
+        byte[] rawKeyTable3 = { 0, 0, 0, 0, 0, 1, 1, 1, 1, 1 };
+        byte[] rawKeyTable4 = { 1, 0, 0, 0, 1, 0, 1, 1, 1, 0 };
+        byte[] rawKeyTable5 = { 1, 0, 0, 0, 1, 0, 1, 1, 1, 0 };
+        byte[] rawKeyTable6 = { 0, 0, 1, 0, 0, 1, 1, 1, 1, 1 };
+        byte[] rawKeyTable7 = { 0, 0, 1, 0, 0, 1, 1, 1, 1, 1 };
+        byte[] plaintextTable0 = { 0, 0, 0, 0, 0, 0, 0, 0 };
+        byte[] plaintextTable1 = { 1, 1, 1, 1, 1, 1, 1, 1 };
+        byte[] plaintextTable2 = { 0, 0, 0, 0, 0, 0, 0, 0 };
+        byte[] plaintextTable3 = { 1, 1, 1, 1, 1, 1, 1, 1 };
+        byte[] ciphertextTable4 = { 0, 0, 0, 1, 1, 1, 0, 0 };
+        byte[] ciphertextTable5 = { 1, 1, 0, 0, 0, 0, 1, 0 };
+        byte[] ciphertextTable6 = { 1, 0, 0, 1, 1, 1, 0, 1 };
+        byte[] ciphertextTable7 = { 1, 0, 0, 1, 0, 0, 0, 0 };
         byte[] rawKey0 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         byte[] rawKey1 = { 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 };
         byte[] rawKey2 = { 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 };
         byte[] rawKey3 = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-        byte[] plainText0 = { 1, 0, 1, 0, 1, 0, 1, 0 };
-        byte[] plainText1 = { 1, 0, 1, 0, 1, 0, 1, 0 };
-        byte[] plainText2 = { 0, 1, 0, 1, 0, 1, 0, 1 };
-        byte[] plainText3 = { 1, 0, 1, 0, 1, 0, 1, 0 };
-        byte[] cipherText0 = { 0, 0, 0, 1, 0, 0, 0, 1 };
-        byte[] cipherText1 = { 1, 1, 0, 0, 1, 0, 1, 0 };
-        byte[] cipherText2 = { 0, 1, 1, 1, 0, 0, 0, 0 };
-        byte[] cipherText3 = { 0, 0, 0, 0, 0, 1, 0, 0 };
+        byte[] plaintext0 = { 1, 0, 1, 0, 1, 0, 1, 0 };
+        byte[] plaintext1 = { 1, 0, 1, 0, 1, 0, 1, 0 };
+        byte[] plaintext2 = { 0, 1, 0, 1, 0, 1, 0, 1 };
+        byte[] plaintext3 = { 1, 0, 1, 0, 1, 0, 1, 0 };
+        byte[] ciphertext0 = { 0, 0, 0, 1, 0, 0, 0, 1 };
+        byte[] ciphertext1 = { 1, 1, 0, 0, 1, 0, 1, 0 };
+        byte[] ciphertext2 = { 0, 1, 1, 1, 0, 0, 0, 0 };
+        byte[] ciphertext3 = { 0, 0, 0, 0, 0, 1, 0, 0 };
         byte[] P10 = { 3, 5, 2, 7, 4, 10, 1, 9, 8, 6 };
         byte[] P8 = { 6, 3, 7, 4, 8, 5, 10, 9 };
         byte[] P4 = { 2, 4, 3, 1 };
@@ -219,14 +264,33 @@ public class App {
         data.put("rawKey1", rawKey1);
         data.put("rawKey2", rawKey2);
         data.put("rawKey3", rawKey3);
-        data.put("plainText0", plainText0);
-        data.put("plainText1", plainText1);
-        data.put("plainText2", plainText2);
-        data.put("plainText3", plainText3);
-        data.put("cipherText0", cipherText0);
-        data.put("cipherText1", cipherText1);
-        data.put("cipherText2", cipherText2);
-        data.put("cipherText3", cipherText3);
+        data.put("plaintext0", plaintext0);
+        data.put("plaintext1", plaintext1);
+        data.put("plaintext2", plaintext2);
+        data.put("plaintext3", plaintext3);
+        data.put("ciphertext0", ciphertext0);
+        data.put("ciphertext1", ciphertext1);
+        data.put("ciphertext2", ciphertext2);
+        data.put("ciphertext3", ciphertext3);
+
+        data.put("rawKeyTable0", rawKeyTable0);
+        data.put("rawKeyTable1", rawKeyTable1);
+        data.put("rawKeyTable2", rawKeyTable2);
+        data.put("rawKeyTable3", rawKeyTable3);
+        data.put("rawKeyTable4", rawKeyTable4);
+        data.put("rawKeyTable5", rawKeyTable5);
+        data.put("rawKeyTable6", rawKeyTable6);
+        data.put("rawKeyTable7", rawKeyTable7);
+
+        data.put("plaintextTable0", plaintextTable0);
+        data.put("plaintextTable1", plaintextTable1);
+        data.put("plaintextTable2", plaintextTable2);
+        data.put("plaintextTable3", plaintextTable3);
+        data.put("ciphertextTable4", ciphertextTable4);
+        data.put("ciphertextTable5", ciphertextTable5);
+        data.put("ciphertextTable6", ciphertextTable6);
+        data.put("ciphertextTable7", ciphertextTable7);
+
         data.put("P10", P10);
         data.put("P8", P8);
         data.put("P4", P4);

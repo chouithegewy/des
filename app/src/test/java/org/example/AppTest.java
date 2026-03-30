@@ -101,10 +101,10 @@ class AppTest {
     void ipInverseIPTest() {
         byte[] ip = app.data.get("IP").clone();
         byte[] inverseIP = app.data.get("IPinverse").clone();
-        byte[] plainText0 = app.data.get("plainText0").clone();
-        byte[] permuted = permuteArray(plainText0, ip);
+        byte[] plaintext0 = app.data.get("plaintext0").clone();
+        byte[] permuted = permuteArray(plaintext0, ip);
         byte[] inversePermuted = permuteArray(permuted, inverseIP);
-        assertEquals(Arrays.toString(plainText0), Arrays.toString(inversePermuted));
+        assertEquals(Arrays.toString(plaintext0), Arrays.toString(inversePermuted));
     }
 
     @Test
@@ -154,8 +154,8 @@ class AppTest {
         assertEquals(Arrays.toString(expectedK1), Arrays.toString(app.k1));
         assertEquals(Arrays.toString(expectedK2), Arrays.toString(app.k2));
         byte[] ip = app.data.get("IP").clone();
-        byte[] plainText0 = { 0, 1, 1, 1, 0, 0, 1, 0 };
-        byte[] intialPermutation = permuteArray(plainText0, ip);
+        byte[] plaintext0 = { 0, 1, 1, 1, 0, 0, 1, 0 };
+        byte[] intialPermutation = permuteArray(plaintext0, ip);
         byte[] r = new byte[4];
         for (int i = 4; i < 8; i++) {
             r[i - 4] = intialPermutation[i];
@@ -190,8 +190,8 @@ class AppTest {
         byte[] exampleFromDocument = { 1, 0, 1, 0, 0, 0, 0, 0, 1, 0 };
         app.KeyGeneration(exampleFromDocument);
         byte[] ip = app.data.get("IP").clone();
-        byte[] plainText0 = { 0, 1, 1, 1, 0, 0, 1, 0 };
-        byte[] intialPermutation = permuteArray(plainText0, ip);
+        byte[] plaintext0 = { 0, 1, 1, 1, 0, 0, 1, 0 };
+        byte[] intialPermutation = permuteArray(plaintext0, ip);
         byte[] actualP4 = app.fk(intialPermutation, app.k1);
         byte[] expectedP4 = { 0, 1, 1, 1 };
         assertEquals(Arrays.toString(expectedP4), Arrays.toString(actualP4));
@@ -209,64 +209,64 @@ class AppTest {
     @Test
     void encryptTest0() {
         byte[] rawKey0 = data.get("rawKey0");
-        byte[] plainText0 = data.get("plainText0");
-        byte[] cipherText0 = data.get("cipherText0");
-        assertEquals(Arrays.toString(Encrypt(rawKey0, plainText0)), Arrays.toString(cipherText0));
+        byte[] plaintext0 = data.get("plaintext0");
+        byte[] ciphertext0 = data.get("ciphertext0");
+        assertEquals(Arrays.toString(Encrypt(rawKey0, plaintext0)), Arrays.toString(ciphertext0));
     }
 
     @Test
     void encryptTest1() {
         byte[] rawKey1 = data.get("rawKey1");
-        byte[] plainText1 = data.get("plainText1");
-        byte[] cipherText1 = data.get("cipherText1");
-        assertEquals(Arrays.toString(Encrypt(rawKey1, plainText1)), Arrays.toString(cipherText1));
+        byte[] plaintext1 = data.get("plaintext1");
+        byte[] ciphertext1 = data.get("ciphertext1");
+        assertEquals(Arrays.toString(Encrypt(rawKey1, plaintext1)), Arrays.toString(ciphertext1));
     }
 
     @Test
     void encryptTest2() {
         byte[] rawKey2 = data.get("rawKey2");
-        byte[] plainText2 = data.get("plainText2");
-        byte[] cipherText2 = data.get("cipherText2");
-        assertEquals(Arrays.toString(Encrypt(rawKey2, plainText2)), Arrays.toString(cipherText2));
+        byte[] plaintext2 = data.get("plaintext2");
+        byte[] ciphertext2 = data.get("ciphertext2");
+        assertEquals(Arrays.toString(Encrypt(rawKey2, plaintext2)), Arrays.toString(ciphertext2));
     }
 
     @Test
     void encryptTest3() {
         byte[] rawKey3 = data.get("rawKey3");
-        byte[] plainText3 = data.get("plainText3");
-        byte[] cipherText3 = data.get("cipherText3");
-        assertEquals(Arrays.toString(Decrypt(rawKey3, plainText3)), Arrays.toString(cipherText3));
+        byte[] plaintext3 = data.get("plaintext3");
+        byte[] ciphertext3 = data.get("ciphertext3");
+        assertEquals(Arrays.toString(Encrypt(rawKey3, plaintext3)), Arrays.toString(ciphertext3));
     }
 
     @Test
     void decryptTest0() {
         byte[] rawKey0 = data.get("rawKey0");
-        byte[] plainText0 = data.get("plainText0");
-        byte[] cipherText0 = data.get("cipherText0");
-        assertEquals(Arrays.toString(Decrypt(rawKey0, cipherText0)), Arrays.toString(plainText0));
+        byte[] plaintext0 = data.get("plaintext0");
+        byte[] ciphertext0 = data.get("ciphertext0");
+        assertEquals(Arrays.toString(Decrypt(rawKey0, ciphertext0)), Arrays.toString(plaintext0));
     }
 
     @Test
     void decryptTest1() {
         byte[] rawKey1 = data.get("rawKey1");
-        byte[] plainText1 = data.get("plainText1");
-        byte[] cipherText1 = data.get("cipherText1");
-        assertEquals(Arrays.toString(Decrypt(rawKey1, cipherText1)), Arrays.toString(plainText1));
+        byte[] plaintext1 = data.get("plaintext1");
+        byte[] ciphertext1 = data.get("ciphertext1");
+        assertEquals(Arrays.toString(Decrypt(rawKey1, ciphertext1)), Arrays.toString(plaintext1));
     }
 
     @Test
     void decryptTest2() {
         byte[] rawKey2 = data.get("rawKey2");
-        byte[] plainText2 = data.get("plainText2");
-        byte[] cipherText2 = data.get("cipherText2");
-        assertEquals(Arrays.toString(Decrypt(rawKey2, cipherText2)), Arrays.toString(plainText2));
+        byte[] plaintext2 = data.get("plaintext2");
+        byte[] ciphertext2 = data.get("ciphertext2");
+        assertEquals(Arrays.toString(Decrypt(rawKey2, ciphertext2)), Arrays.toString(plaintext2));
     }
 
     @Test
     void decryptTest3() {
         byte[] rawKey3 = data.get("rawKey3");
-        byte[] plainText3 = data.get("plainText3");
-        byte[] cipherText3 = data.get("cipherText3");
-        assertEquals(Arrays.toString(Decrypt(rawKey3, cipherText3)), Arrays.toString(plainText3));
+        byte[] plaintext3 = data.get("plaintext3");
+        byte[] ciphertext3 = data.get("ciphertext3");
+        assertEquals(Arrays.toString(Decrypt(rawKey3, ciphertext3)), Arrays.toString(plaintext3));
     }
 }
