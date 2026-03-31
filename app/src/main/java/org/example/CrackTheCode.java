@@ -1,4 +1,13 @@
-class CrackTheCode {
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import org.example.SDES;
+
+public class CrackTheCode {
+
     static void crackTheCode(String path) {
         try {
             String ciphertextBits = Files.readString(Path.of(path), StandardCharsets.UTF_8).replaceAll("\\s+", "");
@@ -13,7 +22,7 @@ class CrackTheCode {
                         outputDir.resolve(byteString + "_" + i + ".txt").toFile())) {
                     for (int j = 0; j < ciphertextBits.length(); j += 8) {
                         byte[] ciphertext = parseBinaryByte(ciphertextBits.substring(j, j + 8));
-                        byte[] plaintext = Decrypt(rawkey, ciphertext);
+                        byte[] plaintext = SDES.Decrypt(rawkey, ciphertext);
                         byte b = bitsToByte(plaintext);
                         fos.write(b);
                     }
