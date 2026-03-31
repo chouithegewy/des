@@ -34,7 +34,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "org.example.App"
+    mainClass = "org.example.SDES"
 }
 
 tasks.named<Test>("test") {
@@ -44,10 +44,10 @@ tasks.named<Test>("test") {
     testLogging {
         // Output standard out and err (System.out.println)
         showStandardStreams = true
-        
+
         // Log all possible events
         events("started", "passed", "skipped", "failed")
-        
+
         // Ensure ALL stack trace details are printed
         showExceptions = true
         showCauses = true
