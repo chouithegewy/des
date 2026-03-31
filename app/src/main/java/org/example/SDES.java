@@ -1,6 +1,8 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.HashMap;
 
 import org.example.TripleDES;
@@ -24,6 +26,27 @@ public class SDES {
         // app.encryptTest(3);
         app.printTable(false);
         app.printTable(true);
+        // byte[] part3_part1_key = { 0, 1, 1, 1, 0, 0, 0, 1 };
+        List<byte[]> plaintextArrayOfBytes = app.part3("CRYPTOGRAPHY"); // binary ascii representation = "CRYPTOGRAPHY";
+        byte[] rawkeyPt3 = { 0, 1, 1, 1, 0, 0, 1, 1, 0, 1 };
+        for (byte[] p : plaintextArrayOfBytes) {
+            System.out.println(Arrays.toString(Encrypt(rawkeyPt3, p)));
+        }
+    }
+
+    List<byte[]> part3(String text_to_encode) {
+        String text = text_to_encode;
+        byte[] byteArray = text.getBytes();
+        List<byte[]> bytes = new ArrayList<>();
+        for (byte b : byteArray) {
+            String byteString = String.format("%8s", Integer.toBinaryString(b)).replace(' ', '0');
+            byte[] char2byteArray = new byte[8];
+            for (int i = 0; i < byteString.length(); ++i) {
+                char2byteArray[i] = (byte) Character.getNumericValue(byteString.charAt(i));
+            }
+            bytes.add(char2byteArray);
+        }
+        return bytes;
     }
 
     void printTable(boolean x3) {
