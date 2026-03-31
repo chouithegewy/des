@@ -45,3 +45,5 @@ Thumbs.db
 
 # Kotlin
 .kotlin/
+
+assets/msg1/*

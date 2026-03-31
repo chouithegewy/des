@@ -16,6 +16,7 @@ import static org.example.SDES.xor;
 import static org.example.SDES.s0;
 import static org.example.SDES.s1;
 import static org.example.SDES.sw;
+import static org.example.SDES.parseBinaryByte;
 
 class SDESTesT {
     static HashMap<String, byte[]> data = new HashMap<>();
@@ -95,6 +96,12 @@ class SDESTesT {
         // p10 = { 3, 5, 2, 7, 4, 10, 1, 9, 8, 6 }
         byte[] expected = { 1, 0, 1, 1, 0, 0, 1, 1, 1, 0 };
         assertEquals(Arrays.toString(expected), Arrays.toString(permuted));
+    }
+
+    @Test
+    void parseBinaryByteTest() {
+        byte[] expected = { 0, 1, 0, 1, 0, 1, 0, 1 };
+        assertEquals(Arrays.toString(expected), Arrays.toString(parseBinaryByte("01010101")));
     }
 
     @Test
