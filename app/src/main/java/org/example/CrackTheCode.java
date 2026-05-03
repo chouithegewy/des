@@ -414,7 +414,11 @@ public final class CrackTheCode {
     }
 
     private static Path defaultAssetPath(String fileName) {
-        return resolvePath(Path.of("assets", fileName));
+        Path assetPath = resolvePath(Path.of("assets", fileName));
+        if (Files.exists(assetPath)) {
+            return assetPath;
+        }
+        return resolvePath(Path.of(fileName));
     }
 
     private static Path resolvePath(Path path) {
