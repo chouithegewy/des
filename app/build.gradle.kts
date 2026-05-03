@@ -34,7 +34,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "org.example.SDES"
+    mainClass = "org.example.CrackTheCode"
 }
 
 tasks.named<Test>("test") {
