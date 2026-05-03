@@ -47,3 +47,4 @@ Thumbs.db
 .kotlin/
 
 assets/msg1/*
+.gradle-local
